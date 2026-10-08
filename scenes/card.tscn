@@ -44,7 +44,6 @@ offset_left = -31.999998
 offset_top = -54.333332
 offset_right = 33.333336
 offset_bottom = -42.333332
-text = "Card Name"
 label_settings = SubResource("LabelSettings_t8bgg")
 horizontal_alignment = 1
 
@@ -56,7 +55,6 @@ offset_left = -35.0
 offset_top = 8.0
 offset_right = 35.0
 offset_bottom = 48.0
-text = "Card Description"
 label_settings = SubResource("LabelSettings_gvrow")
 horizontal_alignment = 1
 autowrap_mode = 2

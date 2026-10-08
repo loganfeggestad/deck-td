@@ -1,7 +1,7 @@
 @tool
 class_name Card extends Node2D
 
-#region Ready Values
+#region On Ready Values
 @onready var card_base: Sprite2D = $CardFront/CardBase
 @onready var card_image: Sprite2D = $CardFront/Image/ImageSprite
 @onready var card_name: Label = $CardFront/CardNameLabel
@@ -14,6 +14,16 @@ class_name Card extends Node2D
 	$CardFront/Energy/Sticker_2,
 	$CardFront/Energy/Sticker_3
 ]
+#endregion
+#region Properties
+var card_data: CardData;
+var is_dragging: bool = false;
+var mouse_offset: Vector2 = Vector2.ZERO
+var baseline_scale: Vector2 = Vector2(2, 2)
+var baseline_position: Vector2 = Vector2.ZERO
+var baseline_rotation: float = 0.0;
+var baseline_z_idx: int = 0
+var active_tweens: Dictionary[TweenTypes.TweenType, Tween] = {}
 #endregion
 #region Card Value
 var name_text: String = "":
@@ -41,17 +51,10 @@ var image_sprite: Texture2D:
 		if(is_node_ready() and card_image):
 			card_image.texture = image_sprite
 #endregion
-
+#region Signals
 signal mouse_entered(card: Card)
 signal mouse_exited(card: Card)
-
-var card_data: CardData;
-
-var is_dragging: bool = false;
-var mouse_offset: Vector2 = Vector2.ZERO
-var baseline_position: Vector2 = Vector2.ZERO
-var baseline_rotation: float = 0.0;
-var baseline_z_idx: int = 0
+#endregion
 
 func _ready() -> void:
 	update_visuals()
@@ -93,18 +96,34 @@ func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int
 			mouse_offset = get_global_mouse_position() - global_position
 
 func set_baselines() -> void:
+	baseline_scale = scale
 	baseline_position = global_position
 	baseline_rotation = rotation
 	baseline_z_idx = z_index
 
-func set_hovered_visual(is_hovered: bool):
+func set_hovered_visual(is_hovered: bool) -> void:
 	if (is_hovered):
 		scale = Vector2(3, 3)
-		global_position = Vector2(baseline_position.x, 1080 - (card_base.texture.get_size().y * 1.5))
+		global_position = Vector2(
+			baseline_position.x,
+			 1080 - (card_base.texture.get_size().y * 1.5)
+		)
 		rotation = 0.0
 		z_index = 1
 	else:
-		scale = Vector2(2, 2)
+		scale = baseline_scale
 		global_position = baseline_position
 		rotation = baseline_rotation
 		z_index = baseline_z_idx
+
+func is_animating(type: TweenTypes.TweenType) -> bool:
+	var tween: Tween = active_tweens.get(type)
+	return tween != null and tween.is_running()
+	
+func start_tween(type: TweenTypes.TweenType, tween: Tween) -> void:
+	active_tweens[type] = tween
+	
+func finish_tween(type: TweenTypes.TweenType, tween: Tween) -> void:
+	if active_tweens.get(type) == tween:
+		active_tweens.erase(type)
+	
