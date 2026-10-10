@@ -15,7 +15,7 @@ const card_reposition_anim_duration: float = 0.3
 #region Properties
 var hand: Array[Card] = []
 var hovered_cards: Array[Card] = []
-var active_hovered_card: Card = null
+@export var active_hovered_card: Card = null
 #endregion
 #region Signals
 signal discard_card_signal(card: Card)
@@ -33,7 +33,8 @@ func _update_active_hover() -> void:
 	var mouse_pos = get_global_mouse_position()
 
 	for card in hovered_cards:
-		if card.is_animating(TweenTypes.TweenType.HAND_REPOSITION):
+		if card.is_animating(TweenTypes.TweenType.HAND_REPOSITION) or \
+			card.is_animating(TweenTypes.TweenType.DRAW):
 			continue
 		
 		var distance = mouse_pos.distance_to(card.global_position)

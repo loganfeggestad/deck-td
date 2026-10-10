@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c4qqoju1svef2"]
+
+[ext_resource type="PackedScene" uid="uid://b8vouc10dpo6i" path="res://scenes/map.tscn" id="1_pw63i"]
+[ext_resource type="PackedScene" uid="uid://w5xdny5k25n0" path="res://scenes/hand.tscn" id="2_7ykc4"]
+
+[node name="MainScene" type="Node2D" unique_id=1160956591]
+
+[node name="Map" parent="." unique_id=1823202812 instance=ExtResource("1_pw63i")]
+
+[node name="DeckHand" parent="." unique_id=1013115183 instance=ExtResource("2_7ykc4")]

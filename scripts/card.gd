@@ -14,6 +14,7 @@ class_name Card extends Node2D
 	$CardFront/Energy/Sticker_2,
 	$CardFront/Energy/Sticker_3
 ]
+@onready var hand = get_parent()
 #endregion
 #region Properties
 var card_data: CardData;
@@ -91,7 +92,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
+		if event.pressed and hand.active_hovered_card == self:
 			is_dragging = true
 			mouse_offset = get_global_mouse_position() - global_position
 
